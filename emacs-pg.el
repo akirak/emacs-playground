@@ -83,8 +83,11 @@
   (unless url
     (setq url (emacs-pg-read-url  "Source repository (Git) for ~/.emacs.d: ")))
   (unless name
-    (setq name (read-from-minibuffer "Name for the config: "
-                                     (emacs-pg--build-name-from-url url))))
+    (setq name (if (called-interactively-p)
+                   (read-from-minibuffer "Name for the config: "
+                                         (emacs-pg--build-name-from-url url))
+                 (or (emacs-pg--build-name-from-url url)
+                     (error "Failed to get a name from the URL")))))
   (let ((dpath (expand-file-name name emacs-pg-directory)))
     (when (file-exists-p dpath)
       (error (format "%s already exists" dpath)))
