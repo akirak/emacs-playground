@@ -51,7 +51,7 @@
   :group 'pg)
 
 (defun emacs-pg--emacs-executable ()
-  (car (process-lines "which" (car command-line-args))))
+  (executable-find (car command-line-args)))
 
 (defun emacs-pg--script-paths ()
   (let ((dir emacs-pg-script-directory)
