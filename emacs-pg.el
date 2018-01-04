@@ -38,14 +38,17 @@
 
 (defcustom emacs-pg-script-directory
   (expand-file-name ".local/bin" emacs-pg-original-home-directory)
-  "The directory where the wrapper script is saved.")
+  "The directory where the wrapper script is saved."
+  :group 'pg)
 
 (defcustom emacs-pg-directory
   (expand-file-name ".emacs-pg" emacs-pg-original-home-directory)
-  "The directory where home directories of emacs-pg are stored.")
+  "The directory where home directories of emacs-pg are stored."
+  :group 'pg)
 
 (defcustom emacs-pg-inherited-contents '(".gnupg")
-  "Files and directories in the home directory that should be added to virtual home directories.")
+  "Files and directories in the home directory that should be added to virtual home directories."
+  :group 'pg)
 
 (defun emacs-pg--emacs-executable ()
   (car (process-lines "which" (car command-line-args))))
