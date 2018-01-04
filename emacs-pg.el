@@ -158,7 +158,7 @@
       (set-file-modes unwrapper #o744))))
 
 ;;;###autoload
-(defun emacs-pg-unadopt ()
+(defun emacs-pg-dismiss ()
   (interactive)
   (mapc 'delete-file (emacs-pg--script-paths)))
 
