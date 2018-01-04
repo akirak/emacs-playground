@@ -23,3 +23,17 @@
             emacs-pg-dismiss
             emacs-pg-update-symlinks)
  )
+
+;; Add example repositories
+(emacs-pg-add "https://github.com/purcell/emacs.d.git")
+(emacs-pg-add "https://github.com/seagle0128/.emacs.d.git")
+
+;; Select a configuration at startup
+(emacs-pg-try)
+
+;; Display a tutorial in the window
+(setq inhibit-startup-screen t)
+(let ((buf (get-buffer-create  "*emacs-pg-start*")))
+  (with-current-buffer buf
+      (insert "Run 'emacs-pg-try' to start Emacs with another config, and 'emacs-pg-adopt' to replace Emacs"))
+  (switch-to-buffer buf))
