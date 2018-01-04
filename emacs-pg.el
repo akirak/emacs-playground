@@ -96,18 +96,19 @@
                  (or (emacs-pg--build-name-from-url url)
                      (error "Failed to get a name from the URL")))))
   (let ((dpath (expand-file-name name emacs-pg-directory)))
-    (when (file-exists-p dpath)
-      (error (format "%s already exists" dpath)))
-    (condition-case nil
-        (progn
-          (make-directory dpath t)
-          (process-lines "git" "clone" "--recursive" "--depth=1"
-                         url
-                         (expand-file-name ".emacs.d" dpath))
-          (emacs-pg--update-symlinks dpath)
-          name)
-      (error (progn (delete-directory dpath t)
-                    (error "failed"))))))
+    (if (file-exists-p dpath)
+        (progn (message (format "%s already exists" dpath))
+               nil)
+      (condition-case nil
+          (progn
+            (make-directory dpath t)
+            (process-lines "git" "clone" "--recursive" "--depth=1"
+                           url
+                           (expand-file-name ".emacs.d" dpath))
+            (emacs-pg--update-symlinks dpath)
+            name)
+        (error (progn (delete-directory dpath t)
+                      (error "failed")))))))
 
 ;;;###autoload
 (defun emacs-pg-update-symlinks ()
