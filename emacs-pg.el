@@ -84,6 +84,7 @@
     ('nil "")
     (rpath (car (split-string rpath "/")))))
 
+;;;###autoload
 (defun emacs-pg-add (url &optional name)
   (interactive "P")
   (unless url
@@ -108,6 +109,7 @@
       (error (progn (delete-directory dpath t)
                     (error "failed"))))))
 
+;;;###autoload
 (defun emacs-pg-update-symlinks ()
   (interactive)
   (mapc #'emacs-pg--update-symlinks
@@ -115,6 +117,7 @@
 
 (defvar emacs-pg-last-config-home)
 
+;;;###autoload
 (defun emacs-pg-try ()
   (interactive)
   (let* ((candidates (directory-files emacs-pg-directory
@@ -132,6 +135,7 @@
                    (emacs-pg--emacs-executable))
     (setq emacs-pg-last-config-home home)))
 
+;;;###autoload
 (defun emacs-pg-adopt ()
   (interactive)
 
@@ -153,6 +157,7 @@
       (set-file-modes wrapper #o744)
       (set-file-modes unwrapper #o744))))
 
+;;;###autoload
 (defun emacs-pg-unadopt ()
   (interactive)
   (mapc 'delete-file (emacs-pg--script-paths)))
