@@ -59,7 +59,7 @@
     (mapcar (lambda (filename) (expand-file-name filename dir))
             (list original-name (concat original-name "-nopg")))))
 
-(defun emacs-pg-read-url (prompt)
+(defun emacs-pg--read-url (prompt)
   (read-from-minibuffer prompt))
 
 (defun emacs-pg--update-symlinks (dest)
@@ -87,7 +87,7 @@
 (defun emacs-pg-add (url &optional name)
   (interactive "P")
   (unless url
-    (setq url (emacs-pg-read-url  "Source repository (Git) for ~/.emacs.d: ")))
+    (setq url (emacs-pg--read-url  "Source repository (Git) for ~/.emacs.d: ")))
   (unless name
     (setq name (if (called-interactively-p 'any)
                    (read-from-minibuffer "Name for the config: "
