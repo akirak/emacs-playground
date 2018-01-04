@@ -31,6 +31,9 @@
 
 ;;; Code:
 
+(require 'cl)
+(require 'subr-x)
+
 (defconst emacs-pg-original-home-directory (concat "~" user-login-name))
 
 (defcustom emacs-pg-script-directory
@@ -83,7 +86,7 @@
   (unless url
     (setq url (emacs-pg-read-url  "Source repository (Git) for ~/.emacs.d: ")))
   (unless name
-    (setq name (if (called-interactively-p)
+    (setq name (if (called-interactively-p 'any)
                    (read-from-minibuffer "Name for the config: "
                                          (emacs-pg--build-name-from-url url))
                  (or (emacs-pg--build-name-from-url url)
