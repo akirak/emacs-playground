@@ -14,26 +14,22 @@
 ;; You have to install use-package in order to use use-package with straight
 (straight-use-package 'use-package)
 
-(use-package emacs-pg
- :straight (emacs-pg :type git :host github :repo "akirak/emacs-pg")
+(use-package play
+ :straight (play :type git :host github :repo "akirak/play")
  :defer t
- :commands (emacs-pg-try
-            emacs-pg-add
-            emacs-pg-adopt
-            emacs-pg-dismiss
-            emacs-pg-update-symlinks)
+ :commands (play-try
+            play-add
+            play-adopt
+            play-dismiss
+            play-update-symlinks)
  )
 
-;; Add example repositories
-(emacs-pg-add "https://github.com/purcell/emacs.d.git")
-(emacs-pg-add "https://github.com/seagle0128/.emacs.d.git")
-
 ;; Select a configuration at startup
-(emacs-pg-try)
+(play-select)
 
 ;; Display a tutorial in the window
 (setq inhibit-startup-screen t)
-(let ((buf (get-buffer-create  "*emacs-pg-start*")))
+(let ((buf (get-buffer-create  "*play-start*")))
   (with-current-buffer buf
-      (insert "Run 'emacs-pg-try' to start Emacs with another config, and 'emacs-pg-adopt' to replace Emacs"))
+      (insert "Run 'play-try' to start Emacs with another config, and 'play-adopt' to replace Emacs"))
   (switch-to-buffer buf))

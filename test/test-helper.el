@@ -1,8 +1,8 @@
 ;;; test-helper.el --- Helpers for emacs-pg-test.el
 
-(unless (require 'emacs-pg nil 'noerror)
-  (message "attempting to load emacs-pg.el")
-  (load-file "./emacs-pg.el")
+(unless (require 'play nil 'noerror)
+  (message "attempting to load play.el")
+  (load-file "./play.el")
   )
 
 ;;; test-helper.el ends here
