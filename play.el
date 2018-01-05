@@ -123,11 +123,14 @@
 
 (defvar play-last-config-home)
 
+(defun play--process-buffer-name (name)
+  (format "*play %s*" name))
+
 (defun play--start (name home)
   (let ((process-environment (cons (concat "HOME=" home)
                                    process-environment)))
     (start-process "play"
-                   (format "*play %s*" name)
+                   (play--process-buffer-name name)
                    (play--emacs-executable))
     (setq play-last-config-home home)))
 
@@ -219,6 +222,22 @@
            ('nil (error (format "Config named %s does not exist in play-dotemacs-list"
                                 name)))
            (pair (apply 'play--start-with-dotemacs pair))))))))
+
+;;;###autoload
+(defun play-start-last ()
+  (interactive)
+  (pcase (and (boundp 'play-last-config-home)
+              play-last-config-home)
+    ('nil (error "Play has not been run yet. Run 'play-checkout'"))
+    (home (let* ((name (file-name-nondirectory home))
+                 (proc (get-buffer-process (play--process-buffer-name name))))
+            (if (and proc (process-live-p proc))
+                (when (yes-or-no-p (format "%s is still running. Kill it? " name))
+                  (lexical-let ((sentinel (lambda (process event)
+                                            (play--start name home))))
+                    (set-process-sentinel proc sentinel)
+                    (kill-process proc)))
+              (play--start name home))))))
 
 ;;;###autoload
 (defun play-adopt ()
