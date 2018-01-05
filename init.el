@@ -16,20 +16,19 @@
 
 (use-package play
  :straight (play :type git :host github :repo "akirak/play.el")
- :defer t
- :commands (play-try
-            play-add
+ :commands (play-checkout
+            play-start-last
             play-adopt
             play-dismiss
             play-update-symlinks)
  )
 
 ;; Select a configuration at startup
-(play-select)
+(play-checkout)
 
 ;; Display a tutorial in the window
 (setq inhibit-startup-screen t)
 (let ((buf (get-buffer-create  "*play-start*")))
   (with-current-buffer buf
-      (insert "Run 'play-try' to start Emacs with another config, and 'play-adopt' to replace Emacs"))
+      (insert "Run 'play-checkout' to start Emacs with another config, and 'play-adopt' to replace Emacs"))
   (switch-to-buffer buf))
