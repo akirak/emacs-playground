@@ -135,15 +135,16 @@
     (setq play-last-config-home home)))
 
 ;; TODO: Add support for Helm
-(defun play--config-selector (installed available-alist)
-  (completing-read "Choose a configuration: "
+(defun play--config-selector (prompt installed available-alist)
+  (completing-read prompt
                    (remove-duplicates (append installed
                                               (mapcar 'car available-alist))
                                       :test 'equal)))
 
 (defun play--select-config (available-alist)
   (let* ((installed-list (directory-files play-directory nil "^\[^.\]"))
-         (inp (play--config-selector installed-list available-alist))
+         (inp (play--config-selector "Choose a configuration or enter a repository URL: "
+                                     installed-list available-alist))
          (installed (member inp installed-list))
          (available (assoc inp available-alist)))
     (cond
