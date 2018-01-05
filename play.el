@@ -197,8 +197,8 @@
                         (cl-remprop 'repo other-props)))))
 
 ;;;###autoload
-(defun play-checkout (name)
-  (interactive "P")
+(defun play-checkout (&optional name)
+  (interactive)
 
   (make-directory play-directory t)
 
