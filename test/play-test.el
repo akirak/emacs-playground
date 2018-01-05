@@ -36,4 +36,12 @@
   (should (equal (play--github-repo-path-to-https-url "my/repo")
   "https://github.com/my/repo.git")))
 
+(ert-deftest git-url-p-test ()
+  "Test the function to check if a string is a URL recognized by Git"
+  :expected-result :failed
+  (should (play--git-url-p "git@github.com:user/repo.git"))
+  (should (play--git-url-p "https://github.com/user/repo.git"))
+  (should (play--git-url-p "https://github.com/user-123/Repo123"))
+  (should (not (play--git-url-p "apparently this is not a URL"))))
+
 ;;; emacs-pg-test.el ends here

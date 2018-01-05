@@ -58,8 +58,7 @@
         (:repo "https://github.com/syl20bnr/spacemacs.git" :name "spacemacs")
         (:repo "https://github.com/eschulte/emacs24-starter-kit.git" :name "emacs24-starter-kit")
         )
-      "List of configuration repositories suggested in play-checkout."
-      )
+      "List of configuration repositories suggested in play-checkout.")
 
 (defun play--emacs-executable ()
   (executable-find (car command-line-args)))
@@ -112,31 +111,9 @@
     ('nil "")
     (rpath (car (split-string rpath "/")))))
 
-;;;###autoload
-(defun play-add (url &optional name)
-  (interactive "P")
-  (unless url
-    (setq url (play--read-url  "Source repository (Git) for ~/.emacs.d: ")))
-  (unless name
-    (setq name (if (called-interactively-p 'any)
-                   (read-from-minibuffer "Name for the config: "
-                                         (play--build-name-from-url url))
-                 (or (play--build-name-from-url url)
-                     (error "Failed to get a name from the URL")))))
-  (let ((dpath (expand-file-name name play-directory)))
-    (if (file-exists-p dpath)
-        (progn (message (format "%s already exists" dpath))
-               nil)
-      (condition-case nil
-          (progn
-            (make-directory dpath t)
-            (process-lines "git" "clone" "--recursive" "--depth=1"
-                           url
-                           (expand-file-name ".emacs.d" dpath))
-            (play--update-symlinks dpath)
-            name)
-        (error (progn (delete-directory dpath t)
-                      (error "failed")))))))
+(defun play--directory (name)
+  "Get the path of a sandbox named NAME."
+  (expand-file-name name play-directory))
 
 ;;;###autoload
 (defun play-update-symlinks ()
@@ -146,23 +123,102 @@
 
 (defvar play-last-config-home)
 
-;;;###autoload
-(defun play-try ()
-  (interactive)
-  (let* ((candidates (directory-files play-directory
-                                      nil
-                                      "^\[^.\]"))
-         (name-or-url (completing-read "Choose a configuration: " candidates))
-         (name (if (member name-or-url candidates)
-                   name-or-url
-                 (play-add name-or-url)))
-         (home (expand-file-name name play-directory))
-         (process-environment (cons (concat "HOME=" home)
-                                    process-environment)))
+(defun play--start (name home)
+  (let ((process-environment (cons (concat "HOME=" home)
+                                   process-environment)))
     (start-process "play"
                    (format "*play %s*" name)
                    (play--emacs-executable))
     (setq play-last-config-home home)))
+
+;; TODO: Add support for Helm
+(defun play--config-selector (installed available-alist)
+  (completing-read "Choose a configuration: "
+                   (remove-duplicates (append installed
+                                              (mapcar 'car available-alist))
+                                      :test 'equal)))
+
+(defun play--select-config (available-alist)
+  (let* ((installed-list (directory-files play-directory nil "^\[^.\]"))
+         (inp (play--config-selector installed-list available-alist))
+         (installed (member inp installed-list))
+         (available (assoc inp available-alist)))
+    (cond
+     (installed (let ((name inp))
+                  (play--start name (play--directory name))))
+     (available (apply 'play--start-with-dotemacs available))
+     ((play--git-url-p inp) (let ((name (read-from-minibuffer "Name for the config: "
+                                                              (play--build-name-from-url inp))))
+                              (play--start-with-dotemacs name :repo inp)))
+     (t (error (format "Doesn't look like a repository URL: %s" inp))))))
+
+(defun play--git-url-p (s)
+  t ; FIXME
+  )
+
+(cl-defun play--initialize-sandbox (name url
+                                         &key
+                                         (recursive t)
+                                         (depth 1))
+  (condition-case nil
+      (progn
+        (setq dpath (play--directory name))
+        (make-directory dpath t)
+        (apply 'process-lines
+               (remove nil (list "git" "clone"
+                                 (when recursive "--recursive")
+                                 (when depth
+                                   (concat "--depth="
+                                           (cond ((stringp depth) depth)
+                                                 ((numberp depth) (int-to-string depth)))))
+                                 url
+                                 (expand-file-name ".emacs.d" dpath)))
+               )
+        (play--update-symlinks dpath)
+        dpath)
+      (error (progn (messsage (format "Cleaning up %s..." dpath))
+                    (delete-directory dpath t)
+                    (error (error-message-string err))))))
+
+(cl-defun play--start-with-dotemacs (name
+                                     &rest other-props
+                                     &key repo &allow-other-keys)
+  (when (null repo)
+    (error "play--start-with-dotemacs: You must path :repo to this function"))
+  (let ((url (if (play--github-repo-path-p repo)
+                 (play--github-repo-path-to-https-url repo)
+               repo)))
+    (play--start name
+                 (apply 'play--initialize-sandbox
+                        name url
+                        (cl-remprop 'repo other-props)))))
+
+;;;###autoload
+(defun play-checkout (name)
+  (interactive "P")
+
+  (make-directory play-directory t)
+
+  (pcase (and name (play--directory name))
+
+    ;; NAME refers to an existing sandbox
+    (`(and (pred file-directory-p)
+           ,dpath)
+     (play--start name dpath))
+
+    ;; Otherwise
+    ('nil
+     ;; Build an alist from play-dotemacs-list
+     (let ((alist (cl-loop for plist in play-dotemacs-list
+                           collect (cons (or (plist-get plist :name)
+                                             (play--build-name-from-url (plist-get plist :repo)))
+                                         plist))))
+       (if (null name)
+           (play--select-config alist)
+         (pcase (assoc name alist)
+           ('nil (error (format "Config named %s does not exist in play-dotemacs-list"
+                                name)))
+           (pair (apply 'play--start-with-dotemacs pair))))))))
 
 ;;;###autoload
 (defun play-adopt ()
