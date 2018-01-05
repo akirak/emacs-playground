@@ -57,6 +57,7 @@
         (:repo "https://github.com/purcell/emacs.d.git")
         (:repo "https://github.com/syl20bnr/spacemacs.git" :name "spacemacs")
         (:repo "https://github.com/eschulte/emacs24-starter-kit.git" :name "emacs24-starter-kit")
+        (:repo "https://github.com/akirak/emacs.d.git")
         )
       "List of configuration repositories suggested in play-checkout.")
 
