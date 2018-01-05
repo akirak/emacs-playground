@@ -15,7 +15,7 @@
 (straight-use-package 'use-package)
 
 (use-package play
- :straight (play :type git :host github :repo "akirak/play")
+ :straight (play :type git :host github :repo "akirak/play.el")
  :defer t
  :commands (play-try
             play-add
