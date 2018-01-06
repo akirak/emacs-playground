@@ -1,22 +1,8 @@
 # Play.el
 
-Play.el (Play) is a playground for Emacs. The fundamental idea for Play is to start Emacs with `$HOME` environment variable set to a different location:
+Play.el (Play) is a playground for Emacs. It creates a separate directory that will be used as `$HOME` in Emacs and runs Emacs in the modified environment. Play allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for a stuff for Play). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
 
-    HOME=/foo/bar emacs
-
-This command line starts Emacs with `/foo/bar` as its home directory (`~`). Emacs started in this way loads an initialization file from `/foo/bar/.emacs.d/init.el` (or `/foo/bar/.emacs[.el]`, etc.) rather than from `~USER/.emacs.d` (`~USER` means the home directory of USER, which is usually `/home/USER`). You can use this technique to try a configuration repository created by other people. 
-
-This technique causes another effect of 'hiding' a bunch of files and directories located in the original home directory. If you use Emacs alongside other desktop applications, your home directory is likely to contain files that will never be edited or browsed in Emacs. This can be a mess when you use Emacs. However, in an Emacs session in the modified home environment variable, `~` points to `/foo/bar`. This applies to every situation inside the modified Emacs session, including caching downloaded packages, locating recent files and backup files, and interactive interfaces like `find-file`. The modified home environment virtually serves as a sandbox for Emacs. 
-
-Meanwhile, you can still visit files and directories in the original home directory . In `find-file`, you can browse files in your original home directory by typing `~USER/` (`USER` should be your login name) even on the modified environment. The same applies to other commands. You can save typing efforts for specific directories by creating symbolic links from inside the sandbox to corresponding locations in the original home directory, e.g. `~/path` in the sandbox to `~USER/path`.
-
-Play helps you manage sandboxes of this kind. It creates a sandbox in the following steps:
-
-1. Create a new directory inside a fixed location (`~USER/.emacs-play` by default). This will become your sandbox, a virtual `~` for Emacs. 
-2. Clone a given Git repository to `~/.emacs.d` in the sandbox context. You can specify any Git repository as your Emacs configuration for the sandbox. 
-3. Create symbolic links from inside the sandbox to directories in the original home directory. This configuration is done globally, so you can enforce the same structure in all of your sandboxes. 
-
-You can create as many sandboxes as you want. Play allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for a stuff related to Play). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
+For details on the mechanism of Play, see [How it works](#how-it-works) section.
 
 ## Features
 
@@ -63,7 +49,7 @@ As `~/.emacs` precedes `~/.emacs.d/init.el`, this lets you start Emacs with the 
 
 ## Configuration
 
-These settings are mostly for users who might want to use a sandbox regularly. If you just want to try Emacs configurations for a short period of time, you can skip this section. 
+These settings are mostly for users who might want to use a sandbox regularly. If you just want to try Emacs configurations for a short period of time, you can skip this section and proceed to [Usage](#usage).
 
 ### Configuration repositories
 
@@ -112,6 +98,24 @@ If you come to like a particular configuration and want to use it regularly, you
 In case you occasionally run Emacs in your original environment, Play also creates `emacs-noplay` wrapper script. It starts Emacs on the original directory. 
 
 If you don't like the configuration you have adopted, you can roll back this change by running `play-dismiss` command. The wrapper scripts will be deleted, and Emacs will run on the original home directory in all of its succeeding sessions. 
+
+## How it works
+
+The fundamental idea for Play is to start Emacs with `$HOME` environment variable set to a different location:
+
+    HOME=/foo/bar emacs
+
+This command line starts Emacs with `/foo/bar` as its home directory (`~`). Emacs started in this way loads an initialization file from `/foo/bar/.emacs.d/init.el` (or `/foo/bar/.emacs[.el]`, etc.) rather than from `~USER/.emacs.d` (`~USER` means the home directory of USER, which is usually `/home/USER`). You can use this technique to try a configuration repository created by other people. 
+
+This technique causes another effect of 'hiding' a bunch of files and directories located in the original home directory. If you use Emacs alongside other desktop applications, your home directory is likely to contain files that will never be edited or browsed in Emacs. This can be a mess when you use Emacs. However, in an Emacs session in the modified home environment variable, `~` points to `/foo/bar`. This applies to every situation inside the modified Emacs session, including caching downloaded packages, locating recent files and backup files, and interactive interfaces like `find-file`. The modified home environment virtually serves as a sandbox for Emacs. 
+
+Meanwhile, you can still visit files and directories in the original home directory . In `find-file`, you can browse files in your original home directory by typing `~USER/` (`USER` should be your login name) even on the modified environment. The same applies to other commands. You can save typing efforts for specific directories by creating symbolic links from inside the sandbox to corresponding locations in the original home directory, e.g. `~/path` in the sandbox to `~USER/path`.
+
+Play helps you manage sandboxes of this kind. It creates a sandbox in the following steps:
+
+1. Create a new directory inside a fixed location (`~USER/.emacs-play` by default). This will become your sandbox, a virtual `~` for Emacs. 
+2. Clone a given Git repository to `~/.emacs.d` in the sandbox context. You can specify any Git repository as your Emacs configuration for the sandbox. 
+3. Create symbolic links from inside the sandbox to directories in the original home directory. This configuration is done globally, so you can enforce the same structure in all of your sandboxes. 
 
 ## License
 
