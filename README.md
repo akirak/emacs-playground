@@ -1,92 +1,117 @@
-# emacs-pg (Emacs Playground)
+# Play.el
 
-emacs-pg runs Emacs with a sandboxed home directory from within Emacs. It creates a new directory, initialize `.emacs.d` in the sandbox from a remote Git repository, and starts Emacs with the sandbox as `$HOME` directory. This allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration with (almost) no modification. It can also simplify your workflow in Emacs, as it allows you to create a sandboxed Emacs environment where only selected items are visible under `~`. 
+Play.el (Play) is a playground for Emacs. The fundamental idea for Play is to start Emacs with `$HOME` environment variable set to a different location:
+
+    HOME=/foo/bar emacs
+
+This command line starts Emacs with `/foo/bar` as its home directory (`~`). Emacs started in this way loads an initialization file from `/foo/bar/.emacs.d/init.el` (or `/foo/bar/.emacs[.el]`, etc.) rather than from `~USER/.emacs.d` (`~USER` means the home directory of USER, which is usually `/home/USER`). You can use this technique to try a configuration repository created by other people. 
+
+This technique causes another effect of 'hiding' a bunch of files and directories located in the original home directory. If you use Emacs alongside other desktop applications, your home directory is likely to contain files that will never be edited or browsed in Emacs. This can be a mess when you use Emacs. However, in an Emacs session in the modified home environment variable, `~` points to `/foo/bar`. This applies to every situation inside the modified Emacs session, including caching downloaded packages, locating recent files and backup files, and interactive interfaces like `find-file`. The modified home environment virtually serves as a sandbox for Emacs. 
+
+Meanwhile, you can still visit files and directories in the original home directory . In `find-file`, you can browse files in your original home directory by typing `~USER/` (`USER` should be your login name) even on the modified environment. The same applies to other commands. You can save typing efforts for specific directories by creating symbolic links from inside the sandbox to corresponding locations in the original home directory, e.g. `~/path` in the sandbox to `~USER/path`.
+
+Play helps you manage sandboxes of this kind. It creates a sandbox in the following steps:
+
+1. Create a new directory inside a fixed location (`~USER/.emacs-play` by default). This will become your sandbox, a virtual `~` for Emacs. 
+2. Clone a given Git repository to `~/.emacs.d` in the sandbox context. You can specify any Git repository as your Emacs configuration for the sandbox. 
+3. Create symbolic links from inside the sandbox to directories in the original home directory. This configuration is done globally, so you can enforce the same structure in all of your sandboxes. 
+
+You can create as many sandboxes as you want. Play allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for a stuff related to Play). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
+
+## Features
+
+- Two ways to checkout a sandbox: declarative configuration and interactively specifying a Git repository
+- Pre-configured with some popular and notable Emacs configuration repositories. Also including my configuration, which is very minimal at present
+- Support producing symbolic links for selectively mapping a directory structure between sandboxes and the home directory
+- Support producing a wrapper script to replace Emacs for regular use of a sandbox
+
+## Prerequisites
+
+- Emacs
+- Git
+- UNIX-like operating system (tested with Linux)
 
 ## Installation
 
-You can use `(emacs-pg :fetcher github :repo "akirak/emacs-pg")` recipe to install the package.
+Play is planned to published to MELPA, but it is not available for now. 
 
-If you use use-package:
+Use the following recipe:
 
-```emacs-lisp
-(use-package emacs-pg)
+```
+(play :fetcher github :repo "akirak/play.el")
 ```
 
-If you use [straight.el](https://github.com/raxod502/straight.el) with use-package:
+If you use [straight.el](https://github.com/raxod502/straight.el) and use-package, use this directive:
 
 ```emacs-lisp
-(use-package emacs-pg
- :straight (emacs-pg :type git :host github :repo "akirak/emacs-pg")
- :defer t
- :commands (emacs-pg-try
-            emacs-pg-add
-            emacs-pg-adopt
-            emacs-pg-dismiss
-            emacs-pg-update-symlinks)
- )
+(use-package play
+ :straight (play :type git :host github :repo "akirak/play.el")
+ :commands (play-checkout
+            play-start-last
+            play-adopt
+            play-dismiss
+            play-update-symlinks))
 ```
 
-This repository also bundles an example Emacs configuration file which allows you to try pre-configured repositories:
+This repository also bundles a demo configuration file that can be used as an Emacs initialization file. It allows you to try Play with preconfigured repositories. If you keep all of your configuration files in `~/.emacs.d`, it will be safe to use my demo configuration as `~/.emacs`:
 
 ```shell
-curl https://raw.githubusercontent.com/akirak/emacs-pg/master/init.el > ~/.emacs
+curl https://raw.githubusercontent.com/akirak/play.el/master/init.el > ~/.emacs
 ```
+
+As `~/.emacs` precedes `~/.emacs.d/init.el`, this lets you start Emacs with the demo. You can uninstall the demo by deleting `~/.emacs`. 
 
 ## Configuration
 
-By default, emacs-pg installs executable scripts to `~/.local/bin`. If you haven't add this directory to `$PATH`, you can change the installation target by setting `emacs-pg-script-directory` variable:
+These settings are mostly for users who might want to use a sandbox regularly. If you just want to try Emacs configurations for a short period of time, you can skip this section. 
+
+### Configuration repositories
+
+To add configuration repositories suggested in `play-checkout`, set `play-dotemacs-list` variable. 
+
+### Location of wrapper scripts
+
+By default, Play installs wrapper scripts to `~/.local/bin` when you run `play-adopt`. If this directory is not included in your `$PATH`, you can change the destination by setting `play-script-directory`:
 
 ```emacs-lisp
-;;; This should be a directory in your $PATH
-(defcustom emacs-pg-script-directory (expand-file-name "~/bin"))
+(setq play-script-directory (expand-file-name "~/bin")) ; Install scripts to ~/bin
 ```
+
+### Symbolic links
+
+By default, Play creates a symbolic link in sandboxes only for `~/.gnupg`. You can produce more symbolic links by setting `play-inherited-contents`:
+
+```emacs-lisp
+(setq play-inherited-contents '("Dropbox" ".gpg" "git"))
+```
+
+Each item in the list should be a relative path from the home directory. In the above example, the following three symbolic links are created (`~/` is the sandbox context):
+
+- `~/Dropbox` to `~USER/Dropbox` 
+- `~/.gpg` to `~USER/.gpg` 
+- `~/git` to `~USER/git` 
+
+These symbolic links are produced when a new sandbox is created. To update the mappings in previously created sandboxes, run `play-update-symlinks` command. This command creates missing symbolic links in existing sandboxes. 
 
 ## Usage
 
-To try a configuration repository, follow these steps:
+The main entry point to using Play is `play-checkout` command. It allows you to check out a sandbox from the following sources:
 
-1. Run `emacs-pg-try` command and enter a URL to the Git repository.
-2. Emacs is started with a sandbox home directory with the repository as `~/.emacs.d`. Try it.
-3. If you like it, run `emacs-pg-adopt` to set the home directory of Emacs to the sandbox. 
+- Existing sandboxes that you have checked out on the machine (via selection)
+- A predefined list of sandbox configurations (via selection)
+- Any Git repository that should be used as `~/.emacs.d` in the new sandbox context (by typing a URL in the mini buffer)
 
-After you run `emacs-pg-adopt`, Emacs always start with the sandbox directory as `$HOME`. This is done by creating a wrapper script which has the same name as Emacs. If you want to run Emacs with your original/real home directory and `~/.emacs.d`, you can use `emacs-nopg` script. 
+If you enter a URL, Play asks you a name for the created sandbox. It can be any file name. 
 
-You can uninstall these wrapper scripts by running `emacs-pg-dismiss` command in Emacs where emacs-pg is available. 
+After you specify an existing sandbox or a sandbox configuration in `play-checkout`, Play initializes the sandbox if it is not created yet and starts Emacs with the sandbox as its home. You can try it. You can also restart the last selected sandbox by `play-start-last` command. 
 
-### Access files in your home directory
+### Replacing your Emacs
 
-emacs-pg starts Emacs with a sandboxed home directory. `~` in Emacs points to the sandbox, and not the original home directory, so your data files cannot be accessed from `~` in Emacs. You can still visit the original home directory from `~USER` (`USER` is your login name), but this is inconvenient. 
+If you come to like a particular configuration and want to use it regularly, you can make it the default by running `play-adopt` command in the parent Emacs session. It creates a wrapper script that effectively replaces your current Emacs configuration. The following is how it works: The script will have the same name as Emacs (normally `emacs`), and it starts Emacs in the sandbox environment. Granted that this script is installed into a directory that have a higher precedence in  `$PATH`, `emacs` command will always run Emacs on the sandbox. 
 
-To address this issue, emacs-pg has a feature of automatically creating symbolic links from created sandboxes to contents in the original home directory. To produce symbolic links when you create a new sandbox, set `emacs-pg-inherited-contents` variable:
+In case you occasionally run Emacs in your original environment, Play also creates `emacs-noplay` wrapper script. It starts Emacs on the original directory. 
 
-```emacs-lisp
-(setq emacs-pg-inherited-contents
-      '("Dropbox" ".gpg" "git"))
-```
-
-Each item of the variable should be a relative path to the target from the home directory. In the above example, emacs-pg creates the following three symbolic links when it creates a new sandbox:
-
-- `SANDBOX/Dropbox` to `~USER/Dropbox` 
-- `SANDBOX/.gpg` to `~USER/.gpg` 
-- `SANDBOX/git` to `~USER/git` 
-
-You can also use `add-to-list`:
-
-```emacs-lisp
-(add-to-list 'emacs-pg-inherited-contents "Dropbox" 'append)
-```
-
-After you update the configuration, you can use `emacs-pg-update-symlinks` to create missing symbolic links in existing sandboxes. 
-
-## How it works
-
-- `emacs-pg-try` command starts Emacs with a sandbox home directory. You can choose from previously created sandboxes or enter a new repository URL for `~/.emacs.d`. 
-- `emacs-pg-add` command creates a sandbox directory with a given repository as `~/.emacs.d`. It takes the following steps:
-  1. Create the directory for a new sandbox
-  2. Clone the given remote repository into `.emacs.d` directory in the sandbox
-  3. Create symbolic links to contents in the original home directory from the sandbox, as configured in `emacs-pg-inherited-contents` variable
-- `emacs-pg-adopt` command creates a wrapper script running Emacs with the last sandbox directory (selected by `emacs-pg-try`) as `$HOME`. The name of the created script has the same name as Emacs (usually `emacs`), so it virtually replaces Emacs with the sandbox version. It also creates another script named `emacs-nopg`, which runs Emacs without modifying `HOME` variable. 
-- `emacs-pg-dismiss` command deletes the wrapper scripts. 
+If you don't like the configuration you have adopted, you can roll back this change by running `play-dismiss` command. The wrapper scripts will be deleted, and Emacs will run on the original home directory in all of its succeeding sessions. 
 
 ## License
 
