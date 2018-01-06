@@ -259,7 +259,9 @@
                                         emacs-bin))
                              "\n")))
       (with-temp-file unwrapper
-        (insert (format "#!/bin/sh\nexec %s \"$@\"" emacs-bin)))
+        (insert (format "#!/bin/sh\nHOME=%s exec %s \"$@\""
+                        play-original-home-directory
+                        emacs-bin)))
       (set-file-modes wrapper #o744)
       (set-file-modes unwrapper #o744))))
 
