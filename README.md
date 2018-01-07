@@ -1,5 +1,7 @@
 # Play.el
 
+[![Build Status](https://travis-ci.org/akirak/play.el.svg?branch=master)](https://travis-ci.org/akirak/play.el)
+
 Play.el (Play) is a playground for Emacs. It creates a separate directory that will be used as `$HOME` in Emacs and runs Emacs in the modified environment. Play allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for a stuff for Play). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
 
 For details on the mechanism of Play, see [How it works](#how-it-works) section.
@@ -13,7 +15,7 @@ For details on the mechanism of Play, see [How it works](#how-it-works) section.
 
 ## Prerequisites
 
-- Emacs
+- Emacs (>= 24.4 && < 26.0)
 - Git
 - UNIX-like operating system (tested with Linux)
 
