@@ -18,6 +18,7 @@ before_install:
   - export PATH="$HOME/bin:$PATH"
   - wget 'https://raw.githubusercontent.com/flycheck/emacs-travis/master/emacs-travis.mk'
   - make -f emacs-travis.mk install_emacs
+  - make -f emacs-travis.mk install_cask
   - emacs --version
 install:
   - cask install
