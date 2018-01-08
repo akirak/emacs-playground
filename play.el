@@ -249,22 +249,19 @@
   (unless (boundp 'play-last-config-home)
     (error "No play instance has been run yet"))
 
-  (let ((home play-last-config-home)
-        (emacs-bin (play--emacs-executable)))
+  (let ((home play-last-config-home))
     (destructuring-bind
         (wrapper unwrapper) (play--script-paths)
-      (with-temp-file wrapper
-        (insert (string-join `("#!/bin/sh"
-                               ,(format "HOME=%s exec %s \"$@\""
-                                        home
-                                        emacs-bin))
-                             "\n")))
-      (with-temp-file unwrapper
-        (insert (format "#!/bin/sh\nHOME=%s exec %s \"$@\""
-                        play-original-home-directory
-                        emacs-bin)))
-      (set-file-modes wrapper #o744)
-      (set-file-modes unwrapper #o744))))
+      (play--generate-runner wrapper home)
+      (play--generate-runner unwrapper play-original-home-directory))))
+
+(defun play--generate-runner (fpath home)
+  (with-temp-file fpath
+    (insert (concat "#!/bin/sh\n"
+                    (format "HOME=%s exec %s \"$@\""
+                            home
+                            (play--emacs-executable)))))
+  (set-file-modes fpath #o744))
 
 ;;;###autoload
 (defun play-return ()
