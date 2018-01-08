@@ -243,7 +243,7 @@
               (play--start name home))))))
 
 ;;;###autoload
-(defun play-adopt ()
+(defun play-persist ()
   (interactive)
 
   (unless (boundp 'play-last-config-home)
@@ -267,7 +267,7 @@
       (set-file-modes unwrapper #o744))))
 
 ;;;###autoload
-(defun play-dismiss ()
+(defun play-return ()
   (interactive)
   (mapc 'delete-file (play--script-paths)))
 
