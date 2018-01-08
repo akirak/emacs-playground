@@ -127,6 +127,10 @@
   (format "*play %s*" name))
 
 (defun play--start (name home)
+  ;; Fail if Emacs is not run inside a window system
+  (unless window-system
+    (error "Can't start another Emacs as you are not using a window system"))
+
   (let ((process-environment (cons (concat "HOME=" home)
                                    process-environment))
         ;; Convert default-directory to full-path so Play can be run on cask
