@@ -105,11 +105,11 @@ After you specify an existing sandbox or a sandbox configuration in `play-checko
 
 ### Replacing your Emacs
 
-If you come to like a particular configuration and want to use it regularly, you can make it the default by running `play-adopt` command in the parent Emacs session. It creates a wrapper script that effectively replaces your current Emacs configuration. The following is how it works: The script will have the same name as Emacs (normally `emacs`), and it starts Emacs in the sandbox environment. Granted that this script is installed into a directory that have a higher precedence in  `$PATH`, `emacs` command will always run Emacs on the sandbox. 
+If you come to like a particular configuration and want to use it regularly, you can make it the default by running `play-persist` command in the parent Emacs session. It creates a wrapper script that effectively replaces your current Emacs configuration. The following is how it works: The script will have the same name as Emacs (normally `emacs`), and it starts Emacs in the sandbox environment. Granted that this script is installed into a directory that have a higher precedence in  `$PATH`, `emacs` command will always run Emacs on the sandbox. 
 
 In case you occasionally run Emacs in your original environment, Play also creates `emacs-noplay` wrapper script. It starts Emacs on the original directory. 
 
-If you don't like the configuration you have adopted, you can roll back this change by running `play-dismiss` command. The wrapper scripts will be deleted, and Emacs will run on the original home directory in all of its succeeding sessions. 
+If you don't like the configuration you have adopted, you can roll back this change by running `play-return` command. The wrapper scripts will be deleted, and Emacs will run on the original home directory in all of its succeeding sessions. 
 
 ## How it works
 
