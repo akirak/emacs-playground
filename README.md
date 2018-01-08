@@ -19,6 +19,16 @@ For details on the mechanism of Play, see [How it works](#how-it-works) section.
 - Git
 - UNIX-like operating system (tested with Linux)
 
+## Quick start
+
+Clone this repository to somewhere and start Emacs using this command:
+
+    emacs -Q -l play.el
+
+In Emacs, run:
+
+    M-x play-checkout
+
 ## Installation
 
 Play is planned to published to MELPA, but it is not available for now. 
@@ -41,13 +51,13 @@ If you use [straight.el](https://github.com/raxod502/straight.el) and use-packag
             play-update-symlinks))
 ```
 
-This repository also bundles a demo configuration file that can be used as an Emacs initialization file. It allows you to try Play with preconfigured repositories. If you keep all of your configuration files in `~/.emacs.d`, it will be safe to use my demo configuration as `~/.emacs`:
+You can even replace your current configuration with Play:
 
 ```shell
-curl https://raw.githubusercontent.com/akirak/play.el/master/init.el > ~/.emacs
+curl https://raw.githubusercontent.com/akirak/play.el/master/play.el > ~/.emacs
 ```
 
-As `~/.emacs` precedes `~/.emacs.d/init.el`, this lets you start Emacs with the demo. You can uninstall the demo by deleting `~/.emacs`. 
+As `~/.emacs` precedes `~/.emacs.d/init.el`, this lets you start Emacs with play.el as its initialization file. This configuration only contains Play. 
 
 ## Configuration
 
