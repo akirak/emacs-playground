@@ -32,7 +32,6 @@
 ;;; Code:
 
 (require 'cl)
-(require 'subr-x)
 
 (defconst play-original-home-directory (concat "~" user-login-name))
 
