@@ -250,10 +250,15 @@
     (error "No play instance has been run yet"))
 
   (let ((home play-last-config-home))
-    (destructuring-bind
-        (wrapper unwrapper) (play--script-paths)
-      (play--generate-runner wrapper home)
-      (play--generate-runner unwrapper play-original-home-directory))))
+    (when (yes-or-no-p (format "Set $HOME of Emacs to %s? " home))
+      (destructuring-bind
+          (wrapper unwrapper) (play--script-paths)
+        (play--generate-runner wrapper home)
+        (play--generate-runner unwrapper play-original-home-directory)
+        (message (format "%s now starts with %s as $HOME. Use %s to start normally"
+                         (file-name-nondirectory wrapper)
+                         home
+                         (file-name-nondirectory unwrapper)))))))
 
 (defun play--generate-runner (fpath home)
   (with-temp-file fpath
@@ -266,7 +271,8 @@
 ;;;###autoload
 (defun play-return ()
   (interactive)
-  (mapc 'delete-file (remove-if-not 'file-exists-p (play--script-paths))))
+  (when (yes-or-no-p "Delete the scripts created by play? ")
+    (mapc 'delete-file (remove-if-not 'file-exists-p (play--script-paths)))))
 
 (provide 'play)
 
