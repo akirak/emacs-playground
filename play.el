@@ -129,7 +129,9 @@
 
 (defun play--start (name home)
   (let ((process-environment (cons (concat "HOME=" home)
-                                   process-environment)))
+                                   process-environment))
+        ;; Convert default-directory to full-path so Play can be run on cask
+        (default-directory (expand-file-name default-directory)))
     (start-process "play"
                    (play--process-buffer-name name)
                    (play--emacs-executable))
