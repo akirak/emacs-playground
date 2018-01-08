@@ -269,7 +269,7 @@
 ;;;###autoload
 (defun play-return ()
   (interactive)
-  (mapc 'delete-file (play--script-paths)))
+  (mapc 'delete-file (remove-if-not 'file-exists-p (play--script-paths))))
 
 (provide 'play)
 
