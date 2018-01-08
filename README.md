@@ -46,8 +46,8 @@ If you use [straight.el](https://github.com/raxod502/straight.el) and use-packag
  :straight (play :type git :host github :repo "akirak/play.el")
  :commands (play-checkout
             play-start-last
-            play-adopt
-            play-dismiss
+            play-persist
+            play-return
             play-update-symlinks))
 ```
 
