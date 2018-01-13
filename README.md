@@ -69,7 +69,7 @@ To add configuration repositories suggested in `play-checkout`, set `play-dotema
 
 ### Location of wrapper scripts
 
-By default, Play installs wrapper scripts to `~/.local/bin` when you run `play-adopt`. If this directory is not included in your `$PATH`, you can change the destination by setting `play-script-directory`:
+By default, Play installs wrapper scripts to `~/.local/bin` when you run `play-persist`. If this directory is not included in your `$PATH`, you can change the destination by setting `play-script-directory`:
 
 ```emacs-lisp
 (setq play-script-directory (expand-file-name "~/bin")) ; Install scripts to ~/bin
@@ -109,7 +109,7 @@ If you come to like a particular configuration and want to use it regularly, you
 
 In case you occasionally run Emacs in your original environment, Play also creates `emacs-noplay` wrapper script. It starts Emacs on the original directory. 
 
-If you don't like the configuration you have adopted, you can roll back this change by running `play-return` command. The wrapper scripts will be deleted, and Emacs will run on the original home directory in all of its succeeding sessions. 
+If you don't like the configuration you have set as the default, you can roll back this change by running `play-return` command. The wrapper scripts will be deleted, and Emacs will run on the original home directory in all of its succeeding sessions. 
 
 ## How it works
 
