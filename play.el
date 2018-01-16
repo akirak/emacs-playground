@@ -177,25 +177,25 @@
                                          &key
                                          (recursive t)
                                          (depth 1))
-  (condition-case nil
-      (progn
-        (setq dpath (play--directory name))
-        (make-directory dpath t)
-        (apply 'process-lines
-               (remove nil (list "git" "clone"
-                                 (when recursive "--recursive")
-                                 (when depth
-                                   (concat "--depth="
-                                           (cond ((stringp depth) depth)
-                                                 ((numberp depth) (int-to-string depth)))))
-                                 url
-                                 (expand-file-name ".emacs.d" dpath)))
-               )
-        (play--update-symlinks dpath)
-        dpath)
+  (let ((dpath (play--directory name)))
+    (condition-case err
+        (progn
+          (make-directory dpath t)
+          (apply 'process-lines
+                 (remove nil (list "git" "clone"
+                                   (when recursive "--recursive")
+                                   (when depth
+                                     (concat "--depth="
+                                             (cond ((stringp depth) depth)
+                                                   ((numberp depth) (int-to-string depth)))))
+                                   url
+                                   (expand-file-name ".emacs.d" dpath)))
+                 )
+          (play--update-symlinks dpath)
+          dpath)
       (error (progn (message (format "Cleaning up %s..." dpath))
                     (delete-directory dpath t)
-                    (error (error-message-string err))))))
+                    (error (error-message-string err)))))))
 
 (cl-defun play--start-with-dotemacs (name
                                      &rest other-props
