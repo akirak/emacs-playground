@@ -1,11 +1,11 @@
-;;; play.el --- Run Emacs in a sandboxed home directory -*- lexical-binding: t -*-
+;;; play.el --- Manage sandboxes for alternative configurations -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2018 by Akira Komamura
 
 ;; Author: Akira Komamura <akira.komamura@gmail.com>
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.4"))
-;; Keywords: emacs
+;; Keywords: maint
 ;; URL: https://github.com/akirak/play.el
 
 ;; This file is not part of GNU Emacs.
