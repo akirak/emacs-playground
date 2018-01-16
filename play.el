@@ -170,8 +170,13 @@
      (t (error (format "Doesn't look like a repository URL: %s" inp))))))
 
 (defun play--git-url-p (s)
-  t ; FIXME
-  )
+  (or (string-match-p "^\\(?:ssh|rsync|git|https?|file\\)://.+\.git/?$" s)
+      (string-match-p "^\\(?:[-.a-zA-Z1-9]+@\\)?[-./a-zA-Z1-9]+:[-./a-zA-Z1-9]+\.git/?$" s)
+      (string-match-p (concat "^https://github.com/"
+                              play--github-repo-path-pattern) s)
+      (and (string-suffix-p ".git" s) (file-directory-p s)) ; local bare repository
+      (and (file-directory-p s) (file-directory-p (expand-file-name ".git" s))) ; local working tree
+      ))
 
 (cl-defun play--initialize-sandbox (name url
                                          &key

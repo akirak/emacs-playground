@@ -38,7 +38,6 @@
 
 (ert-deftest git-url-p-test ()
   "Test the function to check if a string is a URL recognized by Git"
-  :expected-result :failed
   (should (play--git-url-p "git@github.com:user/repo.git"))
   (should (play--git-url-p "https://github.com/user/repo.git"))
   (should (play--git-url-p "https://github.com/user-123/Repo123"))
