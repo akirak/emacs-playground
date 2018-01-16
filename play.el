@@ -126,7 +126,7 @@
 (defun play--build-name-from-url (url)
   "Produce a sandbox name from a repository URL."
   (pcase (play--parse-github-url url)
-    ('nil "")
+    (`nil "")
     (rpath (car (split-string rpath "/")))))
 
 (defun play--directory (name)
@@ -260,7 +260,7 @@ If NAME is given, check out the sandbox from play-dotemacs-alist."
      (play--start name dpath))
 
     ;; Otherwise
-    ('nil
+    (`nil
      ;; Build an alist from play-dotemacs-list
      (let ((alist (cl-loop for plist in play-dotemacs-list
                            collect (cons (or (plist-get plist :name)
@@ -269,7 +269,7 @@ If NAME is given, check out the sandbox from play-dotemacs-alist."
        (if (null name)
            (play--select-config alist)
          (pcase (assoc name alist)
-           ('nil (error (format "Config named %s does not exist in play-dotemacs-list"
+           (`nil (error (format "Config named %s does not exist in play-dotemacs-list"
                                 name)))
            (pair (apply 'play--start-with-dotemacs pair))))))))
 
@@ -279,7 +279,7 @@ If NAME is given, check out the sandbox from play-dotemacs-alist."
   (interactive)
   (pcase (and (boundp 'play-last-config-home)
               play-last-config-home)
-    ('nil (error "Play has not been run yet. Run 'play-checkout'"))
+    (`nil (error "Play has not been run yet. Run 'play-checkout'"))
     (home (let* ((name (file-name-nondirectory home))
                  (proc (get-buffer-process (play--process-buffer-name name))))
             (if (and proc (process-live-p proc))
