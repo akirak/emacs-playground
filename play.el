@@ -247,7 +247,7 @@
                  (proc (get-buffer-process (play--process-buffer-name name))))
             (if (and proc (process-live-p proc))
                 (when (yes-or-no-p (format "%s is still running. Kill it? " name))
-                  (lexical-let ((sentinel (lambda (process event)
+                  (lexical-let ((sentinel (lambda (_ event)
                                             (cond
                                              ((string-prefix-p "killed" event) (play--start name home))))))
                     (set-process-sentinel proc sentinel)
