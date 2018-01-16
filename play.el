@@ -100,13 +100,13 @@
   "A regular expression for a repository path (user/repo) on GitHub.")
 
 (defconst play--github-repo-url-patterns
-  "A list of regular expressions that match a repository URL on GitHub."
   (list (concat "^git@github\.com:\\("
                 play--github-repo-path-pattern
                 "\\)\\(?:\.git\\)$")
         (concat "^https://github\.com/\\("
                 play--github-repo-path-pattern
-                "\\)\\(\.git\\)?$")))
+                "\\)\\(\.git\\)?$"))
+  "A list of regular expressions that match a repository URL on GitHub.")
 
 (defun play--github-repo-path-p (path)
   "Check if PATH is a repository path (user/repo) on GitHub."
