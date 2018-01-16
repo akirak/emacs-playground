@@ -64,7 +64,8 @@
         (:repo "https://github.com/eschulte/emacs24-starter-kit.git" :name "emacs24-starter-kit")
         (:repo "https://github.com/akirak/emacs.d.git")
         )
-      "List of configuration repositories suggested in play-checkout.")
+      "List of configuration repositories suggested in play-checkout."
+      :group 'play)
 
 (defun play--emacs-executable ()
   (executable-find (car command-line-args)))
