@@ -192,7 +192,7 @@
                )
         (play--update-symlinks dpath)
         dpath)
-      (error (progn (messsage (format "Cleaning up %s..." dpath))
+      (error (progn (message (format "Cleaning up %s..." dpath))
                     (delete-directory dpath t)
                     (error (error-message-string err))))))
 
