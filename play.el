@@ -248,7 +248,8 @@
             (if (and proc (process-live-p proc))
                 (when (yes-or-no-p (format "%s is still running. Kill it? " name))
                   (lexical-let ((sentinel (lambda (process event)
-                                            (play--start name home))))
+                                            (cond
+                                             ((string-prefix-p "killed" event) (play--start name home))))))
                     (set-process-sentinel proc sentinel)
                     (kill-process proc)))
               (play--start name home))))))
