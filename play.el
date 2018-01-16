@@ -37,7 +37,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(require 'cl-lib)
 
 (defconst play-original-home-directory (concat "~" user-login-name))
 
@@ -149,7 +149,7 @@
 ;; TODO: Add support for Helm
 (defun play--config-selector (prompt installed available-alist)
   (completing-read prompt
-                   (remove-duplicates (append installed
+                   (cl-remove-duplicates (append installed
                                               (mapcar 'car available-alist))
                                       :test 'equal)))
 
@@ -282,7 +282,7 @@
 (defun play-return ()
   (interactive)
   (when (yes-or-no-p "Delete the scripts created by play? ")
-    (mapc 'delete-file (remove-if-not 'file-exists-p (play--script-paths)))))
+    (mapc 'delete-file (cl-remove-if-not 'file-exists-p (play--script-paths)))))
 
 (provide 'play)
 
