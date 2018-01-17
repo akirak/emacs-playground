@@ -1,10 +1,10 @@
-# Play.el
+# Playground for Emacs
 
 [![Build Status](https://travis-ci.org/akirak/play.el.svg?branch=master)](https://travis-ci.org/akirak/play.el)
 
-Play.el (Play) is a playground for Emacs. Its basic idea is to create an isolated directory called a sandbox and make it `$HOME` of Emacs. Play allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for a stuff for Play). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
+The basic idea behind Playground is to create an isolated directory called a sandbox and make it `$HOME` of Emacs. Playground allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for a stuff for Playground). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
 
-For details on the mechanism of Play, see [How it works](#how-it-works) section.
+For details on the mechanism of Playground, see [How it works](#how-it-works) section.
 
 ## Features
 
@@ -23,32 +23,32 @@ For details on the mechanism of Play, see [How it works](#how-it-works) section.
 
 Clone this repository to somewhere and start Emacs using this command:
 
-    emacs -Q -l play.el
+    emacs -Q -l playground.el
 
 In Emacs, run:
 
-    M-x play-checkout
+    M-x playground-checkout
 
 ## Installation
 
-Play is planned to published to MELPA, but it is not available for now. 
+Playground is planned to published to MELPA, but it is not available for now. 
 
 Use the following recipe:
 
 ```
-(play :fetcher github :repo "akirak/play.el")
+(playground :fetcher github :repo "akirak/emacs-playground")
 ```
 
 If you use [straight.el](https://github.com/raxod502/straight.el) and use-package, use this directive:
 
 ```emacs-lisp
-(use-package play
- :straight (play :type git :host github :repo "akirak/play.el")
- :commands (play-checkout
-            play-start-last
-            play-persist
-            play-return
-            play-update-symlinks))
+(use-package playground
+ :straight (playground :type git :host github :repo "akirak/emacs-playground")
+ :commands (playground-checkout
+            playground-start-last
+            playground-persist
+            playground-return
+            playground-update-symlinks))
 ```
 
 You can even replace your current configuration with Play:
@@ -65,22 +65,22 @@ These settings are mostly for users who might want to use a sandbox regularly. I
 
 ### Configuration repositories
 
-To add configuration repositories suggested in `play-checkout`, set `play-dotemacs-list` variable. 
+To add configuration repositories suggested in `playground-checkout`, set `playground-dotemacs-list` variable. 
 
 ### Location of wrapper scripts
 
-By default, Play installs wrapper scripts to `~/.local/bin` when you run `play-persist`. If this directory is not included in your `$PATH`, you can change the destination by setting `play-script-directory`:
+By default, Playground installs wrapper scripts to `~/.local/bin` when you run `playground-persist`. If this directory is not included in your `$PATH`, you can change the destination by setting `playground-script-directory`:
 
 ```emacs-lisp
-(setq play-script-directory (expand-file-name "~/bin")) ; Install scripts to ~/bin
+(setq playground-script-directory (expand-file-name "~/bin")) ; Install scripts to ~/bin
 ```
 
 ### Symbolic links
 
-By default, Play creates a symbolic link in sandboxes only for `~/.gnupg`. You can produce more symbolic links by setting `play-inherited-contents`:
+By default, Playground creates a symbolic link in sandboxes only for `~/.gnupg`. You can produce more symbolic links by setting `playground-inherited-contents`:
 
 ```emacs-lisp
-(setq play-inherited-contents '("Dropbox" ".gpg" "git"))
+(setq playground-inherited-contents '("Dropbox" ".gpg" "git"))
 ```
 
 Each item in the list should be a relative path from the home directory. In the above example, the following three symbolic links are created (`~/` is the sandbox context):
@@ -89,31 +89,31 @@ Each item in the list should be a relative path from the home directory. In the 
 - `~/.gpg` to `~USER/.gpg` 
 - `~/git` to `~USER/git` 
 
-These symbolic links are produced when a new sandbox is created. To update the mappings in previously created sandboxes, run `play-update-symlinks` command. This command creates missing symbolic links in existing sandboxes. 
+These symbolic links are produced when a new sandbox is created. To update the mappings in previously created sandboxes, run `playground-update-symlinks` command. This command creates missing symbolic links in existing sandboxes. 
 
 ## Usage
 
-The main entry point to using Play is `play-checkout` command. It allows you to check out a sandbox from the following sources:
+The main entry point to using Playground is `playground-checkout` command. It allows you to check out a sandbox from the following sources:
 
 - Existing sandboxes that you have checked out on the machine (via selection)
 - A predefined list of sandbox configurations (via selection)
 - Any Git repository that should be used as `~/.emacs.d` in the new sandbox context (by typing a URL in the mini buffer)
 
-If you enter a URL, Play asks you a name for the created sandbox. It can be any file name. 
+If you enter a URL, Playground asks you a name for the created sandbox. It can be any file name. 
 
-After you specify an existing sandbox or a sandbox configuration in `play-checkout`, Play initializes the sandbox if it is not created yet and starts Emacs with the sandbox as its home. You can try it. You can also restart the last selected sandbox by `play-start-last` command. 
+After you specify an existing sandbox or a sandbox configuration in `playground-checkout`, Playground initializes the sandbox if it is not created yet and starts Emacs with the sandbox as its home. You can try it. You can also restart the last selected sandbox by `playground-start-last` command. 
 
 ### Replacing your Emacs
 
-If you come to like a particular configuration and want to use it regularly, you can make it the default by running `play-persist` command in the parent Emacs session. It creates a wrapper script that effectively replaces your current Emacs configuration. The following is how it works: The script will have the same name as Emacs (normally `emacs`), and it starts Emacs in the sandbox environment. Granted that this script is installed into a directory that have a higher precedence in  `$PATH`, `emacs` command will always run Emacs on the sandbox. 
+If you come to like a particular configuration and want to use it regularly, you can make it the default by running `playground-persist` command in the parent Emacs session. It creates a wrapper script that effectively replaces your current Emacs configuration. The following is how it works: The script will have the same name as Emacs (normally `emacs`), and it starts Emacs in the sandbox environment. Granted that this script is installed into a directory that have a higher precedence in  `$PATH`, `emacs` command will always run Emacs on the sandbox. 
 
-In case you occasionally run Emacs in your original environment, Play also creates `emacs-noplay` wrapper script. It starts Emacs on the original directory. 
+In case you occasionally run Emacs in your original environment, Playground also creates `emacs-noplay` wrapper script. It starts Emacs on the original directory. 
 
-If you don't like the configuration you have set as the default, you can roll back this change by running `play-return` command. The wrapper scripts will be deleted, and Emacs will run on the original home directory in all of its succeeding sessions. 
+If you don't like the configuration you have set as the default, you can roll back this change by running `playground-return` command. The wrapper scripts will be deleted, and Emacs will run on the original home directory in all of its succeeding sessions. 
 
 ## How it works
 
-The fundamental idea for Play is to start Emacs with `$HOME` environment variable set to a different location:
+The fundamental idea for Playground is to start Emacs with `$HOME` environment variable set to a different location:
 
     HOME=/foo/bar emacs
 
@@ -123,7 +123,7 @@ This technique causes another effect of 'hiding' a bunch of files and directorie
 
 Meanwhile, you can still visit files and directories in the original home directory . In `find-file`, you can browse files in your original home directory by typing `~USER/` (`USER` should be your login name) even on the modified environment. The same applies to other commands. You can save typing efforts for specific directories by creating symbolic links from inside the sandbox to corresponding locations in the original home directory, e.g. `~/path` in the sandbox to `~USER/path`.
 
-Play helps you manage sandboxes of this kind. It creates a sandbox in the following steps:
+Playground helps you manage sandboxes of this kind. It creates a sandbox in the following steps:
 
 1. Create a new directory inside a fixed location (`~USER/.emacs-play` by default). This will become your sandbox, a virtual `~` for Emacs. 
 2. Clone a given Git repository to `~/.emacs.d` in the sandbox context. You can specify any Git repository as your Emacs configuration for the sandbox. 
