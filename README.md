@@ -31,8 +31,6 @@ In Emacs, run:
 
 ## Installation
 
-Playground is planned to published to MELPA, but it is not available for now. 
-
 Use the following recipe:
 
 ```
@@ -50,14 +48,6 @@ If you use [straight.el](https://github.com/raxod502/straight.el) and use-packag
             playground-return
             playground-update-symlinks))
 ```
-
-You can even replace your current configuration with Play:
-
-```shell
-curl https://raw.githubusercontent.com/akirak/play.el/master/play.el > ~/.emacs
-```
-
-As `~/.emacs` precedes `~/.emacs.d/init.el`, this lets you start Emacs with play.el as its initialization file. This configuration only contains Play. 
 
 ## Configuration
 
