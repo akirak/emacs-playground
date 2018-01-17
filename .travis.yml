@@ -23,7 +23,7 @@ install:
   - cask install
 script:
   - cask exec ert-runner
-  - emacs --batch --load play.el --eval '(play--initialize-sandbox "akirak" "https://github.com/akirak/emacs.d.git")'
+  - emacs --batch --load playground.el --eval '(playground--initialize-sandbox "akirak" "https://github.com/akirak/emacs.d.git")'
   - test -d $HOME/.emacs-play/akirak/.emacs.d
 notifications:
   email:
