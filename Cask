@@ -1,7 +1,7 @@
 (source gnu)
 (source melpa)
 
-(package-file "play.el")
+(package-file "playground.el")
 
 (development
  (depends-on "ert-runner")
