@@ -284,7 +284,7 @@ If NAME is given, check out the sandbox from playground-dotemacs-alist."
                  (proc (get-buffer-process (playground--process-buffer-name name))))
             (if (and proc (process-live-p proc))
                 (when (yes-or-no-p (format "%s is still running. Kill it? " name))
-                  (lexical-let ((sentinel (lambda (_ event)
+                  (let ((sentinel (lambda (_ event)
                                             (cond
                                              ((string-prefix-p "killed" event) (playground--start name home))))))
                     (set-process-sentinel proc sentinel)
@@ -301,7 +301,7 @@ If NAME is given, check out the sandbox from playground-dotemacs-alist."
 
   (let ((home playground-last-config-home))
     (when (yes-or-no-p (format "Set $HOME of Emacs to %s? " home))
-      (destructuring-bind
+      (cl-destructuring-bind
           (wrapper unwrapper) (playground--script-paths)
         (playground--generate-runner wrapper home)
         (playground--generate-runner unwrapper playground-original-home-directory)
@@ -315,8 +315,8 @@ If NAME is given, check out the sandbox from playground-dotemacs-alist."
   (with-temp-file fpath
     (insert (concat "#!/bin/sh\n"
                     (format "HOME=%s exec %s \"$@\""
-                            home
-                            (playground--emacs-executable)))))
+                            (shell-quote-argument home)
+                            (shell-quote-argument (playground--emacs-executable))))))
   (set-file-modes fpath #o744))
 
 ;;;###autoload
