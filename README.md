@@ -17,7 +17,8 @@ For details on the mechanism of Playground, see [How it works](#how-it-works) se
 
 - Emacs (>= 24.4 && < 26.0)
 - Git
-- UNIX-like operating system (tested with Linux)
+- UNIX-like operating system with a graphical environment (not on terminal)
+  - On Windows, Playground cannot generate a convenient shell script, but it still allows you to try a configuration
 
 ## Quick start
 
@@ -31,23 +32,7 @@ In Emacs, run:
 
 ## Installation
 
-Use the following recipe:
-
-```
-(playground :fetcher github :repo "akirak/emacs-playground")
-```
-
-If you use [straight.el](https://github.com/raxod502/straight.el) and use-package, use this directive:
-
-```emacs-lisp
-(use-package playground
- :straight (playground :type git :host github :repo "akirak/emacs-playground")
- :commands (playground-checkout
-            playground-start-last
-            playground-persist
-            playground-return
-            playground-update-symlinks))
-```
+Playground is available on MELPA as `playground` package. 
 
 ## Configuration
 
@@ -119,6 +104,11 @@ Playground helps you manage sandboxes of this kind. It creates a sandbox in the 
 2. Clone a given Git repository to `~/.emacs.d` in the sandbox context. You can specify any Git repository as your Emacs configuration for the sandbox. 
 3. Create symbolic links from inside the sandbox to directories in the original home directory. This configuration is done globally, so you can enforce the same structure in all of your sandboxes. 
 
+## Thanks
+
+- [alphapapa](https://github.com/alphapapa) for an advice on the project name
+- [purcell](https://github.com/purcell) for contribution
+
 ## License
 
-[GPL](LICENSE.txt)
+[GPL v3](LICENSE.txt)
