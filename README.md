@@ -20,19 +20,19 @@ For details on the mechanism of Playground, see [How it works](#how-it-works) se
 - UNIX-like operating system with a graphical environment (not on terminal)
   - On Windows, Playground cannot generate a convenient shell script, but it still allows you to try a configuration
 
-## Quick start
+## Installation
 
-Clone this repository to somewhere and start Emacs using this command:
+Playground is available on MELPA as `playground` package.
+
+An alternative way is to clone this repository to somewhere and start Emacs using this command: 
 
     emacs -Q -l playground.el
 
-In Emacs, run:
+## Quick start
 
     M-x playground-checkout
 
-## Installation
-
-Playground is available on MELPA as `playground` package. 
+Then select a configuration in the minibuffer.
 
 ## Configuration
 
