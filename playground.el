@@ -52,7 +52,8 @@
   "The directory where home directories of playground are stored."
   :group 'playground)
 
-(defcustom playground-inherited-contents '(".gnupg")
+(defcustom playground-inherited-contents
+  '(".gnupg" ".config/git" ".gitconfig" ".cache/chromium" ".config/chromium")
   "Files and directories in the home directory that should be added to virtual home directories."
   :group 'playground)
 
