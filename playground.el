@@ -293,10 +293,11 @@ COMPLETION is a symbol representing a completion engine to be used. See
   (let ((url (if (playground--github-repo-path-p repo)
                  (playground--github-repo-path-to-https-url repo)
                repo)))
+    (cl-remf other-props :repo)
+    (cl-remf other-props :name)
     (playground--start name
                        (apply 'playground--initialize-sandbox
-                              name url
-                              (cl-remprop 'repo other-props)))))
+                              name url other-props))))
 
 ;;;###autoload
 (defun playground-checkout (name &optional spec)
