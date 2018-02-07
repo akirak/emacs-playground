@@ -1,5 +1,6 @@
-language: python
+language: emacs-lisp
 sudo: false
+dist: trusty
 cache:
   - directories:
       - "$HOME/emacs"
@@ -12,6 +13,7 @@ env:
   - EMACS_VERSION=24.5
   - EMACS_VERSION=25.1
   - EMACS_VERSION=25.3
+  - EMACS_VERSION=26.0.90 PRETEST=yes
   - EMACS_VERSION=snapshot
 before_install:
   - export PATH="$HOME/bin:$PATH"
