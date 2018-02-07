@@ -319,7 +319,7 @@ COMPLETION is a symbol representing a completion engine to be used. See
   (interactive)
   (pcase (and (boundp 'playground-last-config-home)
               playground-last-config-home)
-    (`nil (error "Play has not been run yet. Run 'playground-checkout'"))
+    (`nil (error "Playground has not been run yet. Run 'playground-checkout'"))
     (home (let* ((name (file-name-nondirectory home))
                  (proc (get-buffer-process (playground--process-buffer-name name))))
             (if (and proc (process-live-p proc))
@@ -337,7 +337,7 @@ COMPLETION is a symbol representing a completion engine to be used. See
   (interactive)
 
   (unless (boundp 'playground-last-config-home)
-    (error "No play instance has been run yet"))
+    (error "No playground instance has been run yet"))
 
   (let ((home playground-last-config-home))
     (when (yes-or-no-p (format "Set $HOME of Emacs to %s? " home))
