@@ -4,7 +4,7 @@
 
 The basic idea behind Playground is to create an isolated directory called a sandbox and make it `$HOME` of Emacs. Playground allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for a stuff for Playground). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
 
-For details on the mechanism of Playground, see [How it works](#how-it-works) section.
+For details on the mechanism of Playground, see [how it works](#how-it-works) section.
 
 ## Features
 
@@ -40,7 +40,15 @@ These settings are mostly for users who might want to use a sandbox regularly. I
 
 ### Configuration repositories
 
-To add configuration repositories suggested in `playground-checkout`, set `playground-dotemacs-list` variable. 
+To add configuration repositories suggested in `playground-checkout`, set `playground-dotemacs-list` variable.
+
+Each entry in the variable is a plist. The following keys are supported:
+
+- `:repo`: A Git repository URL to be used as ~/.emacs.d. Required.
+- `:branch`: A branch of the repository to check out. Optional, and the default is `HEAD`. 
+- `:name`: A name of the sandbox. This can be any directory name, Optional, and the default is produced from the user name of the repository.
+- `:recursive`: Recursively check out submodules in the repository. The default is true, and you can set this to `nil`. 
+- `:depth`: Limit the number of commits to fetch. The default is `1` (only the latest commit), but you can set this to `nil` to get all commits.  
 
 ### Location of wrapper scripts
 
@@ -107,7 +115,7 @@ Playground helps you manage sandboxes of this kind. It creates a sandbox in the 
 ## Thanks
 
 - [alphapapa](https://github.com/alphapapa) for an advice on the project name
-- [purcell](https://github.com/purcell) for contribution
+- [purcell](https://github.com/purcell) for a contribution
 
 ## License
 
