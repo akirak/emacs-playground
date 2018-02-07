@@ -260,9 +260,10 @@ COMPLETION is a symbol representing a completion engine to be used. See
       ))
 
 (cl-defun playground--initialize-sandbox (name url
-                                         &key
-                                         (recursive t)
-                                         (depth 1))
+                                               &key
+                                               branch
+                                               (recursive t)
+                                               (depth 1))
   "Initialize a sandbox with a configuration repository."
   (let ((dpath (playground--directory name)))
     (condition-case err
@@ -270,14 +271,14 @@ COMPLETION is a symbol representing a completion engine to be used. See
           (make-directory dpath t)
           (apply 'process-lines
                  (remove nil (list "git" "clone"
+                                   (when branch (concat "--branch=" branch))
                                    (when recursive "--recursive")
                                    (when depth
                                      (concat "--depth="
                                              (cond ((stringp depth) depth)
                                                    ((numberp depth) (int-to-string depth)))))
                                    url
-                                   (expand-file-name ".emacs.d" dpath)))
-                 )
+                                   (expand-file-name ".emacs.d" dpath))))
           (playground--update-symlinks dpath)
           dpath)
       (error (progn (message (format "Cleaning up %s..." dpath))
