@@ -316,6 +316,28 @@ COMPLETION is a symbol representing a completion engine to be used. See
           (pair (apply #'playground--start-with-dotemacs pair)))))))
 
 ;;;###autoload
+(defun playground-checkout-with-options ()
+  "Create a new sandbox by interactively specifying options."
+  (interactive)
+  (let* ((repo-url (completing-read "Repository for ~/.emacs.d: "
+                                    (mapcar (lambda (plist)
+                                              (plist-get plist :repo))
+                                            playground-dotemacs-list)))
+         (branch (read-from-minibuffer "Branch of the configuration: "))
+         (name (read-from-minibuffer (format "Name of the sandbox for %s: "
+                                             repo-url)))
+         (recursive (y-or-n-p "Recursively clone submodules? "))
+         (depth (when (y-or-n-p "Fetch all the commits in the branch? ") nil 1)))
+    (playground-checkout name (list
+                               :name name
+                               :repo repo-url
+                               :branch (if (string-empty-p branch)
+                                           nil
+                                         branch)
+                               :recursive recursive
+                               :depth depth))))
+
+;;;###autoload
 (defun playground-start-last ()
   "Start Emacs on the last sandbox run by Playground."
   (interactive)
