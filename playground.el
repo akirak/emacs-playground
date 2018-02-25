@@ -231,7 +231,7 @@ COMPLETION is a symbol representing a completion engine to be used. See
   (let ((local (playground--get-local-sandboxes))
         (remote (playground--dotemacs-alist)))
     (pcase (or completion (playground--completion-engine))
-      ('helm (playground--helm-select-sandbox local remote))
+      ('helm (playground--helm-select-sandbox prompt local remote))
       (_ (let* ((candidates (append (cl-loop for name in local
                                              collect (cons (format "%s" name)
                                                            (list name 'local)))
