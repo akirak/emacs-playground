@@ -34,6 +34,8 @@ An alternative way is to clone this repository to somewhere and start Emacs usin
 
 Then select a configuration in the minibuffer.
 
+Alternatively, there is also `playground-checkout-with-options` command, which allows you to interactively specify detailed options such as a different name of the sandbox or a branch. 
+
 ## Configuration
 
 These settings are mostly for users who might want to use a sandbox regularly. If you just want to try Emacs configurations for a short period of time, you can skip this section and proceed to [Usage](#usage).
