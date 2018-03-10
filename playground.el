@@ -348,8 +348,8 @@ COMPLETION is a symbol representing a completion engine to be used. See
             (if (and proc (process-live-p proc))
                 (when (yes-or-no-p (format "%s is still running. Kill it? " name))
                   (let ((sentinel (lambda (_ event)
-                                            (cond
-                                             ((string-prefix-p "killed" event) (playground--start name home))))))
+                                    (cond
+                                     ((string-prefix-p "killed" event) (playground--start name home))))))
                     (set-process-sentinel proc sentinel)
                     (kill-process proc)))
               (playground--start name home))))))
