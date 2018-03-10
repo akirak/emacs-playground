@@ -58,16 +58,15 @@
   :group 'playground)
 
 (defcustom playground-dotemacs-list
-      '(
-        (:repo "https://github.com/bbatsov/prelude.git" :name "prelude")
-        (:repo "https://github.com/seagle0128/.emacs.d.git")
-        (:repo "https://github.com/purcell/emacs.d.git")
-        (:repo "https://github.com/syl20bnr/spacemacs.git" :name "spacemacs")
-        (:repo "https://github.com/eschulte/emacs24-starter-kit.git" :name "emacs24-starter-kit")
-        (:repo "https://github.com/akirak/emacs.d.git")
-        )
-      "List of configuration repositories suggested in ‘playground-checkout’."
-      :group 'playground)
+  '(
+    (:repo "https://github.com/bbatsov/prelude.git" :name "prelude")
+    (:repo "https://github.com/seagle0128/.emacs.d.git")
+    (:repo "https://github.com/purcell/emacs.d.git")
+    (:repo "https://github.com/syl20bnr/spacemacs.git" :name "spacemacs")
+    (:repo "https://github.com/eschulte/emacs24-starter-kit.git" :name "emacs24-starter-kit")
+    )
+  "List of configuration repositories suggested in ‘playground-checkout’."
+  :group 'playground)
 
 (defun playground--emacs-executable ()
   "Get the executable file of Emacs."
