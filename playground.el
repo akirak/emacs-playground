@@ -326,7 +326,7 @@ COMPLETION is a symbol representing a completion engine to be used. See
          (name (read-from-minibuffer (format "Name of the sandbox for %s: "
                                              repo-url)))
          (recursive (y-or-n-p "Recursively clone submodules? "))
-         (depth (when (y-or-n-p "Fetch all the commits in the branch? ") nil 1)))
+         (depth (if (y-or-n-p "Fetch all the commits in the branch? ") nil 1)))
     (playground-checkout name (list
                                :name name
                                :repo repo-url
