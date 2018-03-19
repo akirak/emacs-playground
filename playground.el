@@ -199,6 +199,7 @@ If the argument is not given, the value is taken from `playground-dotemacs-list'
 LOCAL is a list of local sandbox names, and REMOTE is an alist of (name . spec)."
   (require 'helm)
   (helm :prompt prompt
+        :buffer "*helm playground*"
         :sources (list (helm-build-sync-source
                            "Local"
                          :candidates local
