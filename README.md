@@ -2,14 +2,16 @@
 
 [![Build Status](https://travis-ci.org/akirak/emacs-playground.svg?branch=master)](https://travis-ci.org/akirak/emacs-playground)
 
-The basic idea behind Playground is to create an isolated directory called a sandbox and make it `$HOME` of Emacs. Playground allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for a stuff for Playground). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
+Playground lets you try out `.emacs.d` configuration repositories.
+
+The basic idea behind Playground is to create an isolated directory called a sandbox and make it `$HOME` of Emacs. Playground allows you to easily experiment with various Emacs configuration repositories available on GitHub, while keeping your current configuration untouched (almost, except for stuffs related to Playground). It can also simplify your workflow in Emacs by hiding irrelevant files and directories existing in your home directory. 
 
 For details on the mechanism of Playground, see [how it works](#how-it-works) section.
 
 ## Features
 
 - Two ways to checkout a sandbox: declarative configuration and interactively specifying a Git repository
-- Pre-configured with some popular and notable Emacs configuration repositories. Also including my configuration, which is very minimal at present
+- Configured with some popular and/or notable Emacs configuration repositories
 - Support producing symbolic links for selectively mapping a directory structure between sandboxes and the home directory
 - Support producing a wrapper script to replace Emacs for regular use of a sandbox
 
