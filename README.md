@@ -1,6 +1,7 @@
 # Playground for Emacs
 
 [![Build Status](https://travis-ci.org/akirak/emacs-playground.svg?branch=master)](https://travis-ci.org/akirak/emacs-playground)
+[![MELPA](http://melpa.milkbox.net/packages/playground-badge.svg)](http://melpa.milkbox.net/#/playground)
 
 Playground lets you try out `.emacs.d` configuration repositories.
 
