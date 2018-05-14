@@ -179,7 +179,7 @@ If `playground-use-completion' variable is defined, use the value.
 Otherwise, consider the values of `helm-mode' and `ivy-mode' (or `counsel-mode')."
   (or playground-completion-type
       (cond
-       ((bound-and-true-p 'helm-mode) 'helm))))
+       ((bound-and-true-p helm-mode) 'helm))))
 
 (defun playground--dotemacs-alist (&optional list-of-plists)
   "Build an alist of (name . plist) from LIST-OF-PLISTS of dotemacs.
