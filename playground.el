@@ -169,9 +169,8 @@
 (defcustom playground-completion-type nil
   "Completion engine used for playground."
   :group 'playground
-  :type 'symbol
-  :options '(helm nil)
-  :type 'symbol)
+  :type '(choice (const :tag "Helm" helm)
+                 (const :tag "Use completing-read" nil)))
 
 (defun playground--completion-engine ()
   "Determine which completion engine to use.
