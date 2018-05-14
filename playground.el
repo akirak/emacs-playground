@@ -163,12 +163,11 @@
     (setq playground-last-config-home home)))
 
 (defun playground--get-local-sandboxes ()
+  "Get a list of local variables."
   (directory-files playground-directory nil "^\[^.\]"))
 
 (defcustom playground-completion-type nil
-  "Completion engine used for playground.
-
-The possible values are: nil and helm. "
+  "Completion engine used for playground."
   :group 'playground
   :type 'symbol
   :options '(helm nil)
@@ -181,7 +180,7 @@ If `playground-use-completion' variable is defined, use the value.
 Otherwise, consider the values of `helm-mode' and `ivy-mode' (or `counsel-mode')."
   (or playground-completion-type
       (cond
-       ((and (boundp 'helm-mode) helm-mode) 'helm))))
+       ((bound-and-true-p 'helm-mode) 'helm))))
 
 (defun playground--dotemacs-alist (&optional list-of-plists)
   "Build an alist of (name . plist) from LIST-OF-PLISTS of dotemacs.
@@ -206,7 +205,7 @@ LOCAL is a list of local sandbox names, and REMOTE is an alist of (name . spec).
                          :action
                          (lambda (name) (list name 'local)))
                        (helm-build-sync-source
-                           "Clone .emacs.d from a remote repository"
+                           "Clone emacs.d from a remote repository"
                          :candidates
                          (cl-loop for (name . plist) in remote
                                   unless (member name local)
@@ -223,16 +222,18 @@ LOCAL is a list of local sandbox names, and REMOTE is an alist of (name . spec).
 
 
 (defun playground--select-sandbox (prompt &optional completion)
-  "Let the user select an existing sandbox or a configuration spec and return
+  "Select a sandbox with PROMPT using COMPLETION interface.
+
+Let the user select an existing sandbox or a configuration spec and return
 a list of (user &optional spec). The result is used in `playground-checkout'.
 
 COMPLETION is a symbol representing a completion engine to be used. See
-`playground-completion-type' for possible values. "
+`playground-completion-type' for possible values."
   (let ((local (playground--get-local-sandboxes))
         (remote (playground--dotemacs-alist)))
-    (pcase (or completion (playground--completion-engine))
-      ('helm (playground--helm-select-sandbox prompt local remote))
-      (_ (let* ((candidates (append (cl-loop for name in local
+    (cl-case (or completion (playground--completion-engine))
+      (helm (playground--helm-select-sandbox prompt local remote))
+      (t (let* ((candidates (append (cl-loop for name in local
                                              collect (cons (format "%s" name)
                                                            (list name 'local)))
                                     (cl-loop for (name . plist) in remote

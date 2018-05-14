@@ -27,7 +27,7 @@ install:
 script:
   - cask exec ert-runner
   - cask emacs -Q --batch -l run-package-lint.el playground.el
-  - cask emacs -Q --batch --eval '(setq byte-compile-error-on-warn t)' -f playground.el
+  - cask emacs -Q --batch --eval '(setq byte-compile-error-on-warn t)' -f batch-byte-compile playground.el
   - emacs --batch --load playground.el --eval '(playground--initialize-sandbox "akirak" "https://github.com/akirak/emacs.d.git")'
   - test -d $HOME/.emacs-play/akirak/.emacs.d
 notifications:
