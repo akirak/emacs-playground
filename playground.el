@@ -304,17 +304,18 @@ COMPLETION is a symbol representing a completion engine to be used. See
 ;;;###autoload
 (defun playground-checkout (name &optional spec)
   "Start Emacs on a sandbox named NAME with a dotemacs SPEC."
-  (interactive (playground--select-sandbox "Select a sandbox or enter a URL: "))
-
-  (let* ((dpath (playground--directory name))
-         (exists (file-directory-p dpath)))
-    (cond
-     (exists (playground--start name dpath))
-     ((eq spec 'local) (error "A sandbox named %s does not exist locally" name))
-     (spec (apply #'playground--start-with-dotemacs name spec))
-     (t (pcase (assoc name (playground--dotemacs-alist))
-          (`nil (error "A sandbox named %s is not configured" name))
-          (pair (apply #'playground--start-with-dotemacs pair)))))))
+  (interactive (or (playground--select-sandbox "Select a sandbox or enter a URL: ")
+                   (cons nil nil)))
+  (when name
+    (let* ((dpath (playground--directory name))
+           (exists (file-directory-p dpath)))
+      (cond
+       (exists (playground--start name dpath))
+       ((eq spec 'local) (error "A sandbox named %s does not exist locally" name))
+       (spec (apply #'playground--start-with-dotemacs name spec))
+       (t (pcase (assoc name (playground--dotemacs-alist))
+            (`nil (error "A sandbox named %s is not configured" name))
+            (pair (apply #'playground--start-with-dotemacs pair))))))))
 
 ;;;###autoload
 (defun playground-checkout-with-options ()
