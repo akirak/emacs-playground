@@ -38,6 +38,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'subr-x)
 
 (defconst playground-original-home-directory (concat "~" user-login-name)
   "The original home directory of the user.")
@@ -311,7 +312,7 @@ COMPLETION is a symbol representing a completion engine to be used. See
      (exists (playground--start name dpath))
      ((eq spec 'local) (error "A sandbox named %s does not exist locally" name))
      (spec (apply #'playground--start-with-dotemacs name spec))
-     (t (pcase (assoc name (playground--sandbox-alist))
+     (t (pcase (assoc name (playground--dotemacs-alist))
           (`nil (error "A sandbox named %s is not configured" name))
           (pair (apply #'playground--start-with-dotemacs pair)))))))
 
