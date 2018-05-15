@@ -239,7 +239,7 @@ LOCAL is a list of local sandbox names, and REMOTE is an alist of (name . spec).
                                                     (list name 'local)))
                              (cl-loop for (name . plist) in remote
                                       unless (member name local)
-                                      collect (cons (format "%s: %s"
+                                      collect (cons (format "%-20s: %s"
                                                             name
                                                             (plist-get plist :repo))
                                                     (list name plist)))))
