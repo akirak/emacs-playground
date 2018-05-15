@@ -64,10 +64,21 @@
     (:repo "https://github.com/seagle0128/.emacs.d.git")
     (:repo "https://github.com/purcell/emacs.d.git")
     (:repo "https://github.com/syl20bnr/spacemacs.git" :name "spacemacs")
-    (:repo "https://github.com/eschulte/emacs24-starter-kit.git" :name "emacs24-starter-kit")
-    )
+    (:repo "https://github.com/eschulte/emacs24-starter-kit.git" :name "emacs24-starter-kit"))
   "List of configuration repositories suggested in ‘playground-checkout’."
-  :group 'playground)
+  :group 'playground
+  :type '(repeat (list (const :tag "Repository" :repo) (string :tag "Git URL")
+                       (plist :inline t :tag "Options"
+                              :options
+                              (((const :tag "Specify a name" :name)
+                                string)
+                               ((const :tag "Check out a branch/revision" :branch)
+                                (string :tag "Revision"))
+                               ((const :tag "Recursively clone submodules (default: yes)"
+                                       :recursive)
+                                (const :tag "No" nil))
+                               ((const :tag "Depth (default: 1)" :depth)
+                                (const :tag "All commits" nil)))))))
 
 (defun playground--emacs-executable ()
   "Get the executable file of Emacs."
