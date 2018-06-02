@@ -84,6 +84,10 @@
                                ((const :tag "Depth (default: 1)" :depth)
                                 (const :tag "All commits" nil)))))))
 
+(declare-function 'helm "helm")
+(declare-function 'helm-build-sync-source "helm")
+(declare-function 'helm-build-dummy-source "helm")
+
 (defun playground--emacs-executable ()
   "Get the executable file of Emacs."
   (executable-find (car command-line-args)))
