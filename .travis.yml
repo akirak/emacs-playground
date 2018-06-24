@@ -1,36 +1,27 @@
-language: generic
+language: emacs-lisp
+sudo: required
+dist: trusty
 cache:
-  - directories:
-      - $HOME/.evm
+- directories:
+  - "$HOME/emacs"
 matrix:
   fast_finish: true
   allow_failures:
-    - env: EVM_EMACS=emacs-git-snapshot-travis
+  - env: EMACS_VERSION=snapshot
 env:
-  - EVM_EMACS=emacs-24.4-travis
-  - EVM_EMACS=emacs-24.5-travis
-  - EVM_EMACS=emacs-25.1-travis
-  - EVM_EMACS=emacs-25.2-travis
-  - EVM_EMACS=emacs-25.3-travis
-  - EVM_EMACS=emacs-26-pretest-travis
-  - EVM_EMACS=emacs-git-snapshot-travis
+  matrix:
+  - EMACS_VERSION=24.4
+  - EMACS_VERSION=24.5
+  - EMACS_VERSION=25.1
+  - EMACS_VERSION=25.2
+  - EMACS_VERSION=25.3
+  - EMACS_VERSION=26.1
+  - EMACS_VERSION=snapshot
 before_install:
-  - (cd $HOME/.evm && git pull) || git clone https://github.com/rejeep/evm.git $HOME/.evm
-  - export PATH=$HOME/.cask/bin:$HOME/.evm/bin:$PATH
-  - evm config path /tmp
-  - evm install $EVM_EMACS --use --skip
-  - emacs --version
-  - curl -fsSkL https://raw.github.com/cask/cask/master/go | python
-  - curl -OL https://gist.githubusercontent.com/akirak/f53d7a09b36ef40fa216631672e06582/raw/d6945f0a4690e2df2df3850d1816bdf6bf476dc7/run-package-lint.el
+- make setup
 install:
-  - cask --verbose --debug install
+- make install
 script:
-  - cask exec ert-runner
-  - cask emacs -Q --batch -l run-package-lint.el playground.el
-  - cask emacs -Q --batch --eval '(setq byte-compile-error-on-warn t)' -f batch-byte-compile playground.el
-  - emacs --batch --load playground.el --eval '(playground--initialize-sandbox "akirak" "https://github.com/akirak/emacs.d.git")'
-  - test -d $HOME/.emacs-play/akirak/.emacs.d
-notifications:
-  email:
-    on_success: never
-on_failure: always
+- make test                     # test uncompiled
+- make compile                  # test compilation
+- make test                     # test compiled
