@@ -18,7 +18,7 @@ For details on the mechanism of Playground, see [how it works](#how-it-works) se
 
 ## Prerequisites
 
-- Emacs (>= 24.4)
+- Emacs (>= 25.1)
 - Git
 - UNIX-like operating system with a graphical environment (not on terminal)
   - On Windows, Playground cannot generate a convenient shell script, but it still allows you to try a configuration
