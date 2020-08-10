@@ -29,12 +29,13 @@
 
 ;; Playground lets you try out .emacs.d configuration repositories.
 ;;
-;; The basic idea behind Playground is to create an isolated directory called
-;; a sandbox and make it $HOME of Emacs. Playground allows you to easily
-;; experiment with various Emacs configuration repositories available on GitHub,
-;; while keeping your current configuration untouched (almost, except for stuffs
-;; related to Playground). It can also simplify your workflow in Emacs by hiding
-;; irrelevant files and directories existing in your home directory.
+;; The basic idea behind Playground is to create an isolated directory
+;; called a sandbox and make it $HOME of Emacs.  Playground allows you
+;; to easily experiment with various Emacs configuration repositories
+;; available on GitHub, while keeping your current configuration
+;; untouched (almost, except for stuffs related to Playground).
+;; It can also simplify your workflow in Emacs by hiding irrelevant
+;; files and directories existing in your home directory.
 
 ;;; Code:
 
@@ -84,9 +85,9 @@
                                ((const :tag "Depth (default: 1)" :depth)
                                 (const :tag "All commits" nil)))))))
 
-(declare-function helm "helm")
-(declare-function helm-build-sync-source "helm")
-(declare-function helm-build-dummy-source "helm")
+(declare-function helm "ext:helm")
+(declare-function helm-build-sync-source "ext:helm")
+(declare-function helm-build-dummy-source "ext:helm")
 
 (defun playground--emacs-executable ()
   "Get the executable file of Emacs."
@@ -239,6 +240,10 @@ LOCAL is a list of local sandbox names, and REMOTE is an alist of (name . spec).
                              (:repo ,url)))))))
 
 (defun playground--completing-read-sandbox (prompt local remote)
+  "Complete a sandbox.
+
+For the meanings of PROMPT, LOCAL, and REMOTE, see
+`playground--helm-select-sandbox'."
   (let* ((candidates (append (cl-loop for name in local
                                       collect (cons (format "%s" name)
                                                     (list name 'local)))
@@ -259,11 +264,12 @@ LOCAL is a list of local sandbox names, and REMOTE is an alist of (name . spec).
 (defun playground--select-sandbox (prompt &optional completion)
   "Select a sandbox with PROMPT using COMPLETION interface.
 
-Let the user select an existing sandbox or a configuration spec and return
-a list of (user &optional spec). The result is used in `playground-checkout'.
+Let the user select an existing sandbox or a configuration spec and
+return a list of (user &optional spec).
+The result is used in `playground-checkout'.
 
-COMPLETION is a symbol representing a completion engine to be used. See
-`playground-completion-type' for possible values."
+COMPLETION is a symbol representing a completion engine to be used.
+See `playground-completion-type' for possible values."
   (let ((local (playground--get-local-sandboxes))
         (remote (playground--dotemacs-alist)))
     (if (eq 'helm (or completion (playground--completion-engine)))
@@ -366,11 +372,11 @@ COMPLETION is a symbol representing a completion engine to be used. See
   (interactive)
   (pcase (and (boundp 'playground-last-config-home)
               playground-last-config-home)
-    (`nil (error "Playground has not been run yet. Run 'playground-checkout'"))
+    (`nil (error "Playground has not been run yet.  Run 'playground-checkout'"))
     (home (let* ((name (file-name-nondirectory home))
                  (proc (get-buffer-process (playground--process-buffer-name name))))
             (if (and proc (process-live-p proc))
-                (when (yes-or-no-p (format "%s is still running. Kill it? " name))
+                (when (yes-or-no-p (format "%s is still running.  Kill it? " name))
                   (let ((sentinel (lambda (_ event)
                                     (cond
                                      ((string-prefix-p "killed" event) (playground--start name home))))))
