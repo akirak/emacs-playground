@@ -195,11 +195,12 @@
 (defun playground--completion-engine ()
   "Determine which completion engine to use.
 
-If `playground-use-completion' variable is defined, use the value.
-Otherwise, consider the values of `helm-mode' and `ivy-mode' (or `counsel-mode')."
+If `playground-completion-type' variable is defined, the value is
+used.  Otherwise, if variable `helm-mode' is turned on, it will be
+taken into account."
   (or playground-completion-type
-      (cond
-       ((bound-and-true-p helm-mode) 'helm))))
+      (when (bound-and-true-p helm-mode)
+        'helm)))
 
 (defun playground--dotemacs-alist (&optional list-of-plists)
   "Build an alist of (name . plist) from LIST-OF-PLISTS of dotemacs.
@@ -320,7 +321,10 @@ URL, BRANCH, RECURSIVE, and DEPTH is used to clone the repository."
 (cl-defun playground--start-with-dotemacs (name
                                            &rest other-props
                                            &key repo &allow-other-keys)
-  "Start Emacs on a sandbox named NAME."
+  "Start Emacs on a sandbox named NAME.
+
+OTHER-PROPS are passed `playground--initialize-sandbox'.
+REPO is a path or url to a repository."
   (when (null repo)
     (error "You must pass :repo to playground--start-with-dotemacs function"))
   (let ((url (if (playground--github-repo-path-p repo)
