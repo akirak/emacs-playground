@@ -291,7 +291,11 @@ See `playground-completion-type' for possible values."
                                                branch
                                                (recursive t)
                                                (depth 1))
-  "Initialize a sandbox with a configuration repository."
+  "Initialize a sandbox with a configuration repository.
+
+NAME is the name of a sandbox.
+
+URL, BRANCH, RECURSIVE, and DEPTH is used to clone the repository."
   (let ((dpath (playground--directory name)))
     (condition-case err
         (progn
